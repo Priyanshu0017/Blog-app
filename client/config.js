@@ -1,1 +1,1 @@
-export const ApiUrl = "https://blog-app-frze.onrender.com/"
+export const ApiUrl = "https://blog-app-frze.onrender.com"

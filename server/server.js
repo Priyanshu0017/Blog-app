@@ -1,22 +1,40 @@
-const express = require('express')
-const app = express()
+const express = require("express");
+const app = express();
 const colors = require("colors");
 const connectDB = require("./config/db_config");
-const errorHandler = require('./middlewares/errorHandler');
+const errorHandler = require("./middlewares/errorHandler");
 require("dotenv").config();
 const cors = require("cors");
 
 connectDB();
 
-app.use(cors({origin : "*"}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://blog-app-frze.onrender.com",
+];
 
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      // allow requests with no origin (like mobile apps, curl, etc.)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        const msg =
+          "The CORS policy for this site does not allow access from the specified Origin.";
+        return callback(new Error(msg), false);
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 // Body-Parser
 app.use(express.json());
 
 // Url-Encoded
 app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT  || 8080;
+const PORT = process.env.PORT || 8080;
 
 app.get("/", (req, res) => {
   res.json({
@@ -27,10 +45,10 @@ app.get("/", (req, res) => {
 // user Routes
 app.use("/api/user", require("./routes/authRoutes"));
 
-app.use('/api/author',require('./routes/authorRoutes'))
-app.use('/api/categories',require('./routes/categoriesRoutes'))
-app.use('/api/posts',require('./routes/postRoutes'))
-app.use('/api/admin',require('./routes/adminRoutes'))
+app.use("/api/author", require("./routes/authorRoutes"));
+app.use("/api/categories", require("./routes/categoriesRoutes"));
+app.use("/api/posts", require("./routes/postRoutes"));
+app.use("/api/admin", require("./routes/adminRoutes"));
 
 // errorHandler
 app.use(errorHandler);
