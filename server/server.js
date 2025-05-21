@@ -10,6 +10,7 @@ connectDB();
 
 const allowedOrigins = [
   "http://localhost:5173",
+  'https://blog-app01-sigma.vercel.app/'
 ];
 
 app.use(
