@@ -5,6 +5,9 @@ const connectDB = require("./config/db_config");
 const errorHandler = require("./middlewares/errorHandler");
 require("dotenv").config();
 const cors = require("cors");
+const passport = require('passport')
+const passport_config = require('./config/passport_config')
+const oauthRoutes = require('./routes/oauthRoutes')
 
 connectDB();
 
@@ -36,6 +39,10 @@ app.use(express.urlencoded({ extended: true }));
 
 const PORT = process.env.PORT || 8080;
 
+
+app.use(passport.initialize())
+
+
 app.get("/", (req, res) => {
   res.json({
     msg: "Blog-app API RUNNING...",
@@ -50,6 +57,8 @@ app.use("/api/categories", require("./routes/categoriesRoutes"));
 app.use("/api/posts", require("./routes/postRoutes"));
 app.use("/api/admin", require("./routes/adminRoutes"));
 
+//  this  is for google oAuth
+app.use("/auth", oauthRoutes);
 // errorHandler
 app.use(errorHandler);
 

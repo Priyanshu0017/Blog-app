@@ -10,12 +10,18 @@ const Login = () => {
 
   const [form, setForm] = useState({ email: "", password: "" });
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     await dispatch(login(form));
     // Navigation is handled by App.jsx redirect logic
+  };
+
+  //  this  is for google oAuth
+  const handleLogin = () => {
+    window.location.href = "https://blog-app-frze.onrender.com/auth/google";
   };
 
   return (
@@ -43,14 +49,23 @@ const Login = () => {
         />
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white px-4 py-2 rounded"
+          className="w-full bg-green-600 text-white px-4 py-2 rounded"
           disabled={isLoading}
         >
           {isLoading ? "Logging in..." : "Login"}
         </button>
       </form>
+      <button
+        onClick={handleLogin}
+        className="w-full bg-blue-600 text-white px-6 py-2 my-4 rounded hover:bg-blue-700"
+      >
+        Login with Google
+      </button>
       <div className="mt-4 text-center">
-        Don't have an account? <a href="/register" className="text-blue-600 underline">Register</a>
+        Don't have an account?{" "}
+        <a href="/register" className="text-blue-600 underline">
+          Register
+        </a>
       </div>
     </div>
   );

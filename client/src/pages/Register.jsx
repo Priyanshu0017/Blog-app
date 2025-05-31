@@ -16,7 +16,8 @@ const Register = () => {
     confirmPassword: "",
   });
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,9 +25,17 @@ const Register = () => {
       toast.error("Password mismatch");
       return;
     }
-    await dispatch(register({ name: form.name, email: form.email, password: form.password }));
+    await dispatch(
+      register({ name: form.name, email: form.email, password: form.password })
+    );
     // Navigation is handled by App.jsx redirect logic
   };
+
+
+  //  this  is for google oAuth
+ const handleregister = () => {
+  window.location.href = "https://blog-app-frze.onrender.com/auth/google";
+}
 
   return (
     <div className="max-w-md mx-auto mt-20 bg-white p-8 rounded shadow">
@@ -76,8 +85,17 @@ const Register = () => {
           {isLoading ? "Registering..." : "Register"}
         </button>
       </form>
+      <button
+        onClick={handleregister}
+        className="w-full bg-green-600 text-white px-6 py-2 my-4 rounded hover:bg-blue-700"
+      >
+        Continue with Google
+      </button>
       <div className="mt-4 text-center">
-        Already have an account? <a href="/login" className="text-blue-600 underline">Login</a>
+        Already have an account?{" "}
+        <a href="/login" className="text-blue-600 underline">
+          Login
+        </a>
       </div>
     </div>
   );

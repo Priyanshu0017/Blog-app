@@ -1,6 +1,13 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+  Outlet,
+  useNavigate,
+} from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -14,6 +21,9 @@ import CategoriesList from "./pages/CategoriesList";
 import ManageBlogs from "./pages/ManageBlogsPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import { ToastContainer } from "react-toastify";
+//  this  is for google oAuth
+import { fetchUser } from "./features/auth/authSlice";
+import GoogleCallback from "./components/GoogleCallback";
 
 // Admin route protection
 const AdminRoute = () => {
@@ -36,9 +46,19 @@ const RedirectOnLogin = ({ children }) => {
   return children;
 };
 
+
 const App = () => {
+  //  this  is for google oAuth
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    dispatch(fetchUser()); // call on app load
+  }, []);
+
   return (
-    <Router>
+    <>
       <Navbar />
       <Routes>
         {/* Admin Dashboard Route */}
@@ -58,20 +78,28 @@ const App = () => {
           <Route path="categories" element={<CategoriesList />} />
           <Route path="manage-blogs" element={<ManageBlogs />} />
         </Route>
+        //  this  is for google oAuth
+        <Route path="/google/callback" element={<GoogleCallback />} />
         {/* Auth Routes */}
-        <Route path="/login" element={
-          <RedirectOnLogin>
-            <Login />
-          </RedirectOnLogin>
-        } />
-        <Route path="/register" element={
-          <RedirectOnLogin>
-            <Register />
-          </RedirectOnLogin>
-        } />
+        <Route
+          path="/login"
+          element={
+            <RedirectOnLogin>
+              <Login />
+            </RedirectOnLogin>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <RedirectOnLogin>
+              <Register />
+            </RedirectOnLogin>
+          }
+        />
       </Routes>
       <ToastContainer />
-    </Router>
+      </>
   );
 };
 

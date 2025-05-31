@@ -1,13 +1,22 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-import { logoutUser } from "../features/auth/authSlice";
+import { Link, useNavigate } from "react-router-dom";
+import { clearUser, logoutUser } from "../features/auth/authSlice";
 
 const Navbar = () => {
   let { user } = useSelector((state) => state.auth); // Simulating user state
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
+  //  this is for google oAuth
+  const handleLogout = () => {
+    dispatch(logoutUser());
+    dispatch(clearUser()); // <-- Clear Redux state
+    localStorage.removeItem("user");
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
   return (
     <nav className="flex justify-between items-center md:px-8 p-6 py-2 border border-b-1 border-black shadow-sm">
       <Link to={"/"} className="text-2xl font-bold uppercase">
@@ -16,10 +25,12 @@ const Navbar = () => {
       <div className="space-x-4 flex items-center">
         {user ? (
           // Show Logout button if user exists
-          <button className="px-4 py-2 font-semibold text-sm text-white bg-red-500 rounded hover:bg-red-600 transition duration-200"
-          onClick={() => {
-            dispatch(logoutUser())
-          }}>
+          <button
+            className="px-4 py-2 font-semibold text-sm text-white bg-red-500 rounded hover:bg-red-600 transition duration-200"
+            onClick={() => {
+             handleLogout()
+            }}
+          >
             Logout
           </button>
         ) : (

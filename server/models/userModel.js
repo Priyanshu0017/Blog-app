@@ -1,28 +1,36 @@
+// some changes made for google oAuth
+
 const { mongoose } = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
     },
     email: {
       type: String,
       unique: true,
-      required: true,
     },
     password: {
       type: String,
-      required: true,
     },
     isAdmin: {
       type: Boolean,
-      required: true,
       default: false,
+    },
+    // For Google OAuth
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // allows null + unique
+    },
+    photo: {
+      type: String,
     },
   },
   {
     timestamps: true,
   }
 );
-module.exports = mongoose.model('User' , userSchema)
+
+module.exports = mongoose.model("User", userSchema);
