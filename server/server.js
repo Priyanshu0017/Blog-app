@@ -9,6 +9,8 @@ const passport = require('passport')
 const passport_config = require('./config/passport_config')
 const oauthRoutes = require('./routes/oauthRoutes')
 
+app.set('trust proxy',1);
+
 connectDB();
 
 const allowedOrigins = [
